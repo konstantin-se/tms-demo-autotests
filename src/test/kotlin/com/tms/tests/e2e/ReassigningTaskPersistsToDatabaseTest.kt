@@ -1,4 +1,4 @@
-﻿package com.tms.tests
+﻿package com.tms.tests.e2e
 
 import com.microsoft.playwright.Page
 import com.tms.db.TasksTable

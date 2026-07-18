@@ -1,4 +1,4 @@
-package com.tms.tests
+﻿package com.tms.tests.e2e
 
 import com.tms.tools.junit.TmsUiExtension
 import com.tms.pages.TaskBoardPage
@@ -15,22 +15,22 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TmsUiExtension::class)
 @Epic("Task Management")
-@Feature("Task assignment")
-class ReassigningACompletedTaskTest {
+@Feature("Filtering")
+class FilteringToMyTasksTest {
 
     @Test
-    @Story("Reassign task")
+    @Story("My tasks")
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("A completed task cannot be reassigned")
-    @Description("A task with status Done has its reassign control disabled, and its assignee stays unchanged.")
-    fun reassigningACompletedTask_isBlocked(page: Page) {
+    @DisplayName("Filtering to my tasks shows only tasks assigned to the current user")
+    @Description("Toggling 'Show only my tasks' hides tasks assigned to other users or left unassigned.")
+    fun filteringToMyTasks_showsOnlyTasksAssignedToTheCurrentUser(page: Page) {
         TaskBoardPage(page)
             .open()
             .selectTeam("Team Falcon")
+            .showOnlyMyTasks()
             .tasks()
-            .row("Archive Q1 reports")
-            .shouldHaveStatus("Done")
-            .shouldHaveReassignDisabled()
-            .shouldHaveAssignee("Priya Nair")
+            .shouldContainTaskTitled("Write onboarding checklist")
+            .shouldNotContainTaskTitled("Patch export timeout")
+            .shouldNotContainTaskTitled("Investigate flaky login")
     }
 }

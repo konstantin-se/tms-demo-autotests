@@ -1,4 +1,4 @@
-package com.tms.tests
+﻿package com.tms.tests.e2e
 
 import com.tms.tools.junit.TmsUiExtension
 import com.tms.pages.TaskBoardPage
@@ -17,24 +17,23 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TmsUiExtension::class)
 @Epic("Task Management")
 @Feature("Task assignment")
-class ReassigningTaskToDifferentUserTest: BaseTest() {
+class AssignmentRequiresSelectingAUserTest : BaseTest() {
 
     @Test
-    @Story("Reassign task")
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Reassigning a task changes the assignee")
-    @Description("Opening the assign dialog on an already-assigned task and confirming a different user replaces the assignee.")
-    fun reassigningTask_changesTheAssignee(page: Page) {
+    @Story("Assign task")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Confirming assignment without a user shows a validation error")
+    @Description("Confirming the assign dialog while no user is selected shows a validation error and leaves the task unassigned.")
+    fun confirmingWithoutSelectingAUser_showsValidationError(page: Page) {
         TaskBoardPage(page)
             .open()
             .selectTeam("Team Falcon")
             .tasks()
-            .row("Patch export timeout")
-            .shouldHaveAssignee("Marcus Lee")
+            .row("Refresh dashboard styles")
             .openAssignDialog()
-            .selectAssignee("Priya Nair")
             .confirm()
-            .backToTask()
-            .shouldHaveAssignee("Priya Nair")
+            .shouldShowValidationError()
+            .cancel()
+            .shouldHaveAssignee("Unassigned")
     }
 }

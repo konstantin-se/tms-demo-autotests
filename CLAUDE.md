@@ -10,15 +10,26 @@ System" web app. This file is the contract; agents in `.claude/agents/` defer to
   TestIgnite 0.3.1 (main + test — page objects use its `allureStep` helper, tests use its DB tooling).
 - Never add `allure-kotlin-*` — it ships no JUnit5 integration and conflicts with `allure-junit5`
   (two competing AllureLifecycle instances; documented in `build.gradle.kts`).
+- gRPC: grpc-java 1.82.2 (the version TestIgnite ships) with protobuf 3.25.x codegen via the
+  `com.google.protobuf` Gradle plugin. Keep protoc on the 3.25.x line — 4.x gencode does not
+  compile against the 3.25 runtime that grpc-protobuf 1.82.2 pulls in.
+- REST: rest-assured 6.0.1 at compile scope (the version TestIgnite ships at runtime).
 
 ## Layout
 
 - `src/main/kotlin/com/tms/pages/` — Page Object Model (`BasePage`, `pages/components/` with
   `BaseComponent`); `junit/TmsUiExtension.kt` — per-test `Page` injection; `config/TestConfig.kt`;
   `driver/BrowserFactory.kt`; `tools/log/` — Allure step logging listeners (the `allureStep()`
-  wrapper itself comes from TestIgnite); `tools/server/` — static server.
-- `src/test/resources/webapp/` — the mock app (vanilla HTML/CSS/JS, in-memory state, no backend),
-  served on a random port per run.
+  wrapper itself comes from TestIgnite); `tools/server/` — static server + `GrpcApiServer`.
+- `src/main/proto/` — the `tms.TaskService` contract; generated Java lands under
+  `build/generated/source/proto/` (never edit or commit it). `grpc/TaskGrpcService.kt` implements
+  it against the Postgres `tasks` table; `api/TaskServiceApi.kt` is the test-facing client built on
+  TestIgnite's `GrpcClient` (AllureGrpc attachments come for free). `api/TaskRestApi.kt` is the
+  REST counterpart, built on RestAssured with the `AllureRestAssured` filter.
+- `src/main/resources/webapp/` — the mock app (vanilla HTML/CSS/JS, in-memory state), served on a
+  random port per run. Browsers can't speak native gRPC, so its `fetch()` POSTs land on
+  `StaticSiteServer`, which forwards them to the gRPC `TaskService` (UI → HTTP gateway → gRPC → DB).
+  The gateway doubles as a small REST API: `GET /api/tasks/{id}` answers with the task as proto-JSON.
 - `src/test/kotlin/com/tms/tests/` — one scenario per file, class named `<DoingXyz>Test`.
 
 ## Commands

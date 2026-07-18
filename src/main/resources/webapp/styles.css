@@ -1,0 +1,145 @@
+:root {
+  color-scheme: light;
+  --tms-blue: #1c5c9c;
+  --tms-border: #d5dbe3;
+  --tms-bg: #f5f7fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--tms-bg);
+  color: #1f2933;
+}
+
+.app-header {
+  background: var(--tms-blue);
+  color: white;
+  padding: 1rem 1.5rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+main {
+  padding: 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: end;
+  background: white;
+  border: 1px solid var(--tms-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.checkbox-field {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+select, button {
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--tms-border);
+}
+
+button {
+  background: var(--tms-blue);
+  color: white;
+  border-color: var(--tms-blue);
+  cursor: pointer;
+}
+
+button#assign-cancel-btn,
+button#detail-close-btn {
+  background: white;
+  color: var(--tms-blue);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid var(--tms-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--tms-border);
+}
+
+.status-badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.status-OPEN { background: #fde8d7; color: #9a4a10; }
+.status-IN_PROGRESS { background: #d9ecff; color: #14508c; }
+.status-DONE { background: #dcf3df; color: #216534; }
+
+.actions-cell button {
+  margin-right: 0.35rem;
+}
+
+#empty-state {
+  padding: 1rem;
+  color: #52606d;
+}
+
+dialog {
+  border: none;
+  border-radius: 8px;
+  padding: 1.25rem;
+  max-width: 420px;
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+dialog .field {
+  margin: 0.75rem 0;
+}
+
+[role="alert"] {
+  color: #b3261e;
+  font-size: 0.9rem;
+}

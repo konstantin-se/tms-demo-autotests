@@ -1,0 +1,11 @@
+.gradle/
+build/
+.idea/
+*.iml
+out/
+allure-results/
+allure-report/
+
+.mcp.json
+.claude/TASKS.md
+.claude/settings.local.json

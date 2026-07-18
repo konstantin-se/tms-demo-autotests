@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package tms;
+
+option java_package = "com.tms.grpc";
+option java_multiple_files = true;
+option java_outer_classname = "TaskServiceProto";
+
+// Task API of the mock TMS backend. The webapp's HTTP endpoints act as a thin
+// gateway onto this service (browsers don't speak native gRPC), and tests call
+// it directly through TestIgnite's GrpcClient.
+service TaskService {
+  // Read a single task as the backend currently sees it.
+  rpc GetTask(GetTaskRequest) returns (Task);
+
+  // Move a task to a (new) assignee. Called when the UI confirms the assign dialog.
+  rpc ReassignTask(ReassignTaskRequest) returns (Task);
+
+  // Mark a task DONE. Called when the UI's "Mark complete" button is pressed.
+  rpc CompleteTask(CompleteTaskRequest) returns (Task);
+}
+
+// Status values mirror the strings stored in the 'tasks' table.
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  OPEN = 1;
+  IN_PROGRESS = 2;
+  DONE = 3;
+}
+
+message Task {
+  string id = 1;
+  string title = 2;
+  TaskStatus status = 3;
+  string assignee_id = 4; // empty when unassigned
+}
+
+message GetTaskRequest {
+  string task_id = 1;
+}
+
+message ReassignTaskRequest {
+  string task_id = 1;
+  string assignee_id = 2;
+}
+
+message CompleteTaskRequest {
+  string task_id = 1;
+}

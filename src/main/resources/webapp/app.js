@@ -126,6 +126,7 @@ function openDetailDialog(taskId) {
 
 function markComplete(taskId) {
   tasks.find((t) => t.id === taskId).status = 'DONE';
+  fetch(`/api/tasks/${taskId}/status`, { method: 'POST', body: 'DONE' }).catch(() => {});
   render();
 }
 

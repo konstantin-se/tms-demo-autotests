@@ -20,6 +20,9 @@ object TasksTable {
     fun updateTaskAssignee(taskId: String, assigneeId: String): Unit =
         tmsDB.update("UPDATE tasks SET assignee_id = '$assigneeId' WHERE id = '$taskId'")
 
+    fun updateTaskStatus(taskId: String, status: String): Unit =
+        tmsDB.update("UPDATE tasks SET status = '$status' WHERE id = '$taskId'")
+
 
     fun waitForTaskAssignee(taskId: String, assigneeId: String): Unit =
         allureStep("DB: wait until task '$taskId' has assignee '$assigneeId'") {
@@ -41,6 +44,11 @@ object TasksTable {
                 """.trimIndent(),
                 TaskDbRecord::class.java
             )
+        }
+
+    fun deleteTask(taskId: String): Unit =
+        allureStep("DB: delete task '$taskId'") {
+            tmsDB.delete("DELETE FROM tasks WHERE id = '$taskId'")
         }
 
     fun deleteAllTasks(): Unit =

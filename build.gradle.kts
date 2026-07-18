@@ -1,6 +1,9 @@
+import com.google.protobuf.gradle.id
+
 plugins {
     kotlin("jvm") version "2.1.20"
     id("io.qameta.allure") version "2.12.0"
+    id("com.google.protobuf") version "0.9.4"
 }
 
 group = "com.tms"
@@ -21,7 +24,18 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("org.testcontainers:postgresql:1.21.4")
 
-    testImplementation("org.testcontainers:junit-jupiter:1.21.4")
+    // gRPC version pinned to what TestIgnite 0.3.1 brings at runtime (grpc-api/stub/netty-shaded 1.82.2),
+    // so its GrpcClient and our generated stubs share one wire stack.
+    implementation("io.grpc:grpc-protobuf:1.82.2")
+    implementation("io.grpc:grpc-stub:1.82.2")
+    implementation("io.grpc:grpc-netty-shaded:1.82.2")
+    // allure-grpc (inside TestIgnite's GrpcClient channel) renders payloads with JsonFormat from here.
+    implementation("com.google.protobuf:protobuf-java-util:3.25.8")
+    // Compile-scope RestAssured for the REST API client — pinned to the rest-assured 6.0.1
+    // that TestIgnite ships at runtime.
+    implementation("io.rest-assured:rest-assured:6.0.1")
+
+    implementation("org.testcontainers:junit-jupiter:1.21.4")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
     testImplementation("io.qameta.allure:allure-junit5:2.29.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -29,6 +43,18 @@ dependencies {
 
 kotlin {
     jvmToolchain(23)
+}
+
+protobuf {
+    // protoc must match the protobuf-java that grpc-protobuf 1.82.2 pulls in (3.25.x) —
+    // newer 4.x gencode does not compile against the 3.25 runtime.
+    protoc { artifact = "com.google.protobuf:protoc:3.25.8" }
+    plugins {
+        id("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:1.82.2" }
+    }
+    generateProtoTasks {
+        all().forEach { task -> task.plugins { id("grpc") } }
+    }
 }
 
 allure {

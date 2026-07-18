@@ -21,9 +21,11 @@ class CompletingTaskViaRestApiTest : BaseTest() {
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Completing a task through the REST gateway persists the DONE status")
     @Description(
-        """POSTing DONE to /api/tasks/{id}/status flows through the HTTP gateway to the gRPC TaskService
-            and lands in the Postgres 'tasks' table, verified by reading the task back over REST
-            (GET /api/tasks/{id}) and straight from the database."""
+        """
+        POSTing DONE to /api/tasks/{id}/status flows through the HTTP gateway to the gRPC TaskService
+        and lands in the Postgres 'tasks' table, verified by reading the task back over REST
+        (GET /api/tasks/{id}) and straight from the database.
+        """
     )
     fun completingATaskViaRest_persistsTheStatus() {
         allureStep("Given: task '$taskId' exists and REST reports it as OPEN") {

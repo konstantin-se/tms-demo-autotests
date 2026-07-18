@@ -31,8 +31,8 @@ System" web app. This file is the contract; agents in `.claude/agents/` defer to
   `StaticSiteServer`, which forwards them to the gRPC `TaskService` (UI → HTTP gateway → gRPC → DB).
   The gateway doubles as a small REST API: `GET /api/tasks/{id}` answers with the task as proto-JSON.
 - `src/test/kotlin/com/tms/tests/` — one scenario per file, class named `<DoingXyz>Test`, split by
-  level: `e2e/` (Playwright UI flows), `restapi/` (RestAssured against the REST gateway),
-  `grpcapi/` (GrpcClient against the gRPC TaskService).
+  level: `e2e/` (Playwright UI flows), `rest_api/` (RestAssured against the REST gateway),
+  `grpc_api/` (GrpcClient against the gRPC TaskService).
 
 ## Commands
 

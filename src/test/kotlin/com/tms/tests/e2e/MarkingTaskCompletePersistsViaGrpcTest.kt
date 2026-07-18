@@ -22,8 +22,10 @@ class MarkingTaskCompletePersistsViaGrpcTest : BaseTest() {
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Marking a task complete persists the status to the gRPC TaskService")
     @Description(
-        """Clicking 'Mark complete' updates the status badge and reaches the backend's gRPC TaskService
-(UI → HTTP gateway → CompleteTask), verified by calling GetTask through TestIgnite's GrpcClient."""
+        """
+        Clicking 'Mark complete' updates the status badge and reaches the backend's gRPC TaskService
+        (UI → HTTP gateway → CompleteTask), verified by calling GetTask through TestIgnite's GrpcClient.
+        """
     )
     fun markingATaskComplete_persistsViaGrpc(page: Page) {
         allureStep("Given: the gRPC TaskService reports task 't-1' as OPEN") {

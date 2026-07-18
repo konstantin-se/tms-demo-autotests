@@ -24,8 +24,10 @@ class ReassigningTaskPersistsToDatabaseTest : BaseTest() {
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Reassigning a task persists the new assignee to the database")
     @Description(
-        """Reassigning a task through the UI updates the assignee on screen and in the backing
-Postgres 'tasks' table, verified via TestIgnite's DBSqlExecutor."""
+        """
+        Reassigning a task through the UI updates the assignee on screen and in the backing
+        Postgres 'tasks' table, verified via TestIgnite's DBSqlExecutor.
+        """
     )
     fun reassigningTask_persistsToDatabase(page: Page) {
         TaskBoardPage(page)

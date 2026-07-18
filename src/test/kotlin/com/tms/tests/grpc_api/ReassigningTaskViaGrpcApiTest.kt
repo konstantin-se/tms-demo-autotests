@@ -1,11 +1,11 @@
-﻿package com.tms.tests.grpc_api
+package com.tms.tests.grpc_api
 
 import com.tms.api.TaskServiceApi
+import com.tms.tools.shouldBe
 import com.tms.db.TasksTable
 import com.tms.grpc.TaskStatus
 import io.qameta.allure.*
 import io.testignite.basetest.BaseTest
-import io.testignite.steps.allureStep
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -21,32 +21,20 @@ class ReassigningTaskViaGrpcApiTest : BaseTest() {
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Reassigning a task through the gRPC TaskService persists the new assignee")
     @Description(
-        """Calling ReassignTask on the gRPC TaskService through TestIgnite's GrpcClient moves the task
-            to the new assignee, verified from the RPC response, a follow-up GetTask, and the backing
-            Postgres 'tasks' row."""
+        """
+        Calling ReassignTask on the gRPC TaskService through TestIgnite's GrpcClient moves the task
+        to the new assignee, verified from the RPC response, a follow-up GetTask, and the backing
+        Postgres 'tasks' row.
+        """
     )
     fun reassigningATaskViaGrpc_persistsTheAssignee() {
-        allureStep("Given: task '$taskId' exists and gRPC reports it unassigned") {
-            TasksTable.insertTask(taskId, "Verify gRPC TaskService", TaskStatus.OPEN.name)
-            with(TaskServiceApi.getTask(taskId)) {
-                check(assigneeId.isEmpty()) { "Expected precondition unassigned but assignee was '$assigneeId'" }
-            }
-        }
+        TasksTable.insertTask(taskId, "Verify gRPC TaskService", TaskStatus.OPEN.name)
+        TaskServiceApi.getTask(taskId).assigneeId.shouldBe("", "precondition assignee")
 
-        allureStep("When: ReassignTask moves the task to 'u-marcus'") {
-            with(TaskServiceApi.reassignTask(taskId, "u-marcus")) {
-                check(assigneeId == "u-marcus") { "Expected RPC response assignee 'u-marcus' but was '$assigneeId'" }
-            }
-        }
+        TaskServiceApi.reassignTask(taskId, "u-marcus").assigneeId.shouldBe("u-marcus", "RPC response assignee")
 
-        allureStep("Then: GetTask and the database both report assignee 'u-marcus'") {
-            with(TaskServiceApi.getTask(taskId)) {
-                check(assigneeId == "u-marcus") { "Expected gRPC-reported assignee 'u-marcus' but was '$assigneeId'" }
-            }
-            with(TasksTable.selectTask(taskId)) {
-                check(assigneeId == "u-marcus") { "Expected DB assignee 'u-marcus' but was '$assigneeId'" }
-            }
-        }
+        TaskServiceApi.getTask(taskId).assigneeId.shouldBe("u-marcus")
+        TasksTable.selectTask(taskId).assigneeId.shouldBe("u-marcus")
     }
 
     @AfterEach

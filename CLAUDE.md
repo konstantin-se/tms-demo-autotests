@@ -38,7 +38,7 @@ System" web app. This file is the contract; agents in `.claude/agents/` defer to
 
 - Run everything: `./gradlew test` (Windows: `.\gradlew.bat test`).
 - One test: `./gradlew test --tests "com.tms.tests.e2e.MarkingTaskCompleteTest"`.
-- One level: `./gradlew test --tests "com.tms.tests.restapi.*"` (same for `e2e` / `grpcapi`).
+- One level: `./gradlew test --tests "com.tms.tests.rest_api.*"` (same for `e2e` / `grpcapi`).
 - Debug visually: `-Dheaded=true -DslowMo=200` (never commit config that depends on these).
 - Allure report: `./gradlew allureReport` → `build/reports/allure-report/allureReport`.
 - Serve the mock app in a real browser: `./gradlew runApp`.

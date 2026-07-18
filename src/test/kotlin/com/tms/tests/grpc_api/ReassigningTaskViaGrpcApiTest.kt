@@ -1,4 +1,4 @@
-﻿package com.tms.tests.grpcapi
+﻿package com.tms.tests.grpc_api
 
 import com.tms.api.TaskServiceApi
 import com.tms.db.TasksTable
@@ -22,8 +22,8 @@ class ReassigningTaskViaGrpcApiTest : BaseTest() {
     @DisplayName("Reassigning a task through the gRPC TaskService persists the new assignee")
     @Description(
         """Calling ReassignTask on the gRPC TaskService through TestIgnite's GrpcClient moves the task
-to the new assignee, verified from the RPC response, a follow-up GetTask, and the backing
-Postgres 'tasks' row."""
+            to the new assignee, verified from the RPC response, a follow-up GetTask, and the backing
+            Postgres 'tasks' row."""
     )
     fun reassigningATaskViaGrpc_persistsTheAssignee() {
         allureStep("Given: task '$taskId' exists and gRPC reports it unassigned") {

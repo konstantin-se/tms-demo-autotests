@@ -1,4 +1,4 @@
-﻿package com.tms.tests
+﻿package com.tms.tests.grpcapi
 
 import com.tms.api.TaskServiceApi
 import com.tms.db.TasksTable

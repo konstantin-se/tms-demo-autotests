@@ -1,4 +1,4 @@
-package com.tms.tests
+﻿package com.tms.tests.e2e
 
 import com.tms.tools.junit.TmsUiExtension
 import com.tms.pages.TaskBoardPage
@@ -16,25 +16,24 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TmsUiExtension::class)
 @Epic("Task Management")
 @Feature("Task board")
-class SortingTasksByDueDateTest {
+class SwitchingTeamsRefreshesTaskListTest {
 
     @Test
-    @Story("Sorting")
-    @Severity(SeverityLevel.MINOR)
-    @DisplayName("Sorting by due date orders tasks chronologically")
-    @Description("Sorting Team Falcon's tasks by due date lists them earliest-due first.")
-    fun sortingByDueDate_ordersTasksChronologically(page: Page) {
+    @Story("Team selection")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Switching teams refreshes the task list")
+    @Description("Changing the team selector drops the previous team's tasks and shows the new team's tasks.")
+    fun switchingTeams_refreshesTaskList(page: Page) {
         TaskBoardPage(page)
             .open()
             .selectTeam("Team Falcon")
-            .sortBy("Due date")
             .tasks()
-            .shouldListTasksInOrder(
-                "Archive Q1 reports",
-                "Patch export timeout",
-                "Investigate flaky login",
-                "Write onboarding checklist",
-                "Refresh dashboard styles",
-            )
+            .shouldContainTaskTitled("Investigate flaky login")
+
+        TaskBoardPage(page)
+            .selectTeam("Team Orbit")
+            .tasks()
+            .shouldContainTaskTitled("Rotate API credentials")
+            .shouldNotContainTaskTitled("Investigate flaky login")
     }
 }

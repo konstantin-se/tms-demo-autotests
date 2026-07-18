@@ -30,12 +30,15 @@ System" web app. This file is the contract; agents in `.claude/agents/` defer to
   random port per run. Browsers can't speak native gRPC, so its `fetch()` POSTs land on
   `StaticSiteServer`, which forwards them to the gRPC `TaskService` (UI → HTTP gateway → gRPC → DB).
   The gateway doubles as a small REST API: `GET /api/tasks/{id}` answers with the task as proto-JSON.
-- `src/test/kotlin/com/tms/tests/` — one scenario per file, class named `<DoingXyz>Test`.
+- `src/test/kotlin/com/tms/tests/` — one scenario per file, class named `<DoingXyz>Test`, split by
+  level: `e2e/` (Playwright UI flows), `restapi/` (RestAssured against the REST gateway),
+  `grpcapi/` (GrpcClient against the gRPC TaskService).
 
 ## Commands
 
 - Run everything: `./gradlew test` (Windows: `.\gradlew.bat test`).
-- One test: `./gradlew test --tests "com.tms.tests.MarkingTaskCompleteTest"`.
+- One test: `./gradlew test --tests "com.tms.tests.e2e.MarkingTaskCompleteTest"`.
+- One level: `./gradlew test --tests "com.tms.tests.restapi.*"` (same for `e2e` / `grpcapi`).
 - Debug visually: `-Dheaded=true -DslowMo=200` (never commit config that depends on these).
 - Allure report: `./gradlew allureReport` → `build/reports/allure-report/allureReport`.
 - Serve the mock app in a real browser: `./gradlew runApp`.

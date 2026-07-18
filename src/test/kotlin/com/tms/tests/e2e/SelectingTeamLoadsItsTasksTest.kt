@@ -1,4 +1,4 @@
-package com.tms.tests
+﻿package com.tms.tests.e2e
 
 import com.tms.tools.junit.TmsUiExtension
 import com.tms.pages.TaskBoardPage
@@ -16,21 +16,21 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TmsUiExtension::class)
 @Epic("Task Management")
 @Feature("Task board")
-class FilteringTasksByStatusTest {
+class SelectingTeamLoadsItsTasksTest {
 
     @Test
-    @Story("Filtering")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Filtering by status shows only matching tasks")
-    @Description("Filtering the task list to 'Done' hides Open and In Progress tasks for the selected team.")
-    fun filteringByStatus_showsOnlyMatchingTasks(page: Page) {
+    @Story("Team selection")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Selecting a team loads its tasks")
+    @Description("Before a team is chosen the board prompts for one; selecting a team shows only that team's tasks.")
+    fun selectingTeam_loadsItsTasks(page: Page) {
         TaskBoardPage(page)
             .open()
+            .shouldPromptToSelectATeam()
             .selectTeam("Team Falcon")
-            .filterByStatus("Done")
             .tasks()
-            .shouldContainTaskTitled("Archive Q1 reports")
-            .shouldNotContainTaskTitled("Investigate flaky login")
-            .shouldNotContainTaskTitled("Patch export timeout")
+            .shouldContainTaskTitled("Investigate flaky login")
+            .shouldContainTaskTitled("Refresh dashboard styles")
+            .shouldNotContainTaskTitled("Rotate API credentials")
     }
 }

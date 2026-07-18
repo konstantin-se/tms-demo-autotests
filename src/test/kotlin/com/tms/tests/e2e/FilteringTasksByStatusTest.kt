@@ -1,4 +1,4 @@
-package com.tms.tests
+﻿package com.tms.tests.e2e
 
 import com.tms.tools.junit.TmsUiExtension
 import com.tms.pages.TaskBoardPage
@@ -16,24 +16,21 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TmsUiExtension::class)
 @Epic("Task Management")
 @Feature("Task board")
-class SwitchingTeamsRefreshesTaskListTest {
+class FilteringTasksByStatusTest {
 
     @Test
-    @Story("Team selection")
+    @Story("Filtering")
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Switching teams refreshes the task list")
-    @Description("Changing the team selector drops the previous team's tasks and shows the new team's tasks.")
-    fun switchingTeams_refreshesTaskList(page: Page) {
+    @DisplayName("Filtering by status shows only matching tasks")
+    @Description("Filtering the task list to 'Done' hides Open and In Progress tasks for the selected team.")
+    fun filteringByStatus_showsOnlyMatchingTasks(page: Page) {
         TaskBoardPage(page)
             .open()
             .selectTeam("Team Falcon")
+            .filterByStatus("Done")
             .tasks()
-            .shouldContainTaskTitled("Investigate flaky login")
-
-        TaskBoardPage(page)
-            .selectTeam("Team Orbit")
-            .tasks()
-            .shouldContainTaskTitled("Rotate API credentials")
+            .shouldContainTaskTitled("Archive Q1 reports")
             .shouldNotContainTaskTitled("Investigate flaky login")
+            .shouldNotContainTaskTitled("Patch export timeout")
     }
 }

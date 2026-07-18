@@ -1,4 +1,4 @@
-﻿package com.tms.tests
+﻿package com.tms.tests.restapi
 
 import com.tms.api.TaskRestApi
 import com.tms.db.TasksTable

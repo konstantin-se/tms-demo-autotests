@@ -1,10 +1,6 @@
 package com.tms.api
 
-import com.tms.grpc.GetTaskRequest
-import com.tms.grpc.ReassignTaskRequest
-import com.tms.grpc.Task
-import com.tms.grpc.TaskServiceGrpc
-import com.tms.grpc.TaskStatus
+import com.tms.grpc.*
 import com.tms.tools.server.GrpcApiServer
 import io.testignite.grpc.GrpcClient
 import io.testignite.steps.allureStep
@@ -18,7 +14,7 @@ import java.util.concurrent.TimeUnit
  */
 object TaskServiceApi {
 
-    private val grpcClient by lazy { GrpcClient("localhost", GrpcApiServer.port.toString()) }
+    private val grpcClient = GrpcClient("localhost", GrpcApiServer.port.toString())
 
     private val taskService: TaskServiceGrpc.TaskServiceBlockingStub
         get() = TaskServiceGrpc.newBlockingStub(grpcClient.channel)

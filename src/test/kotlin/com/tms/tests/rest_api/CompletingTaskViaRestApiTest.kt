@@ -1,4 +1,4 @@
-﻿package com.tms.tests.restapi
+﻿package com.tms.tests.rest_api
 
 import com.tms.api.TaskRestApi
 import com.tms.db.TasksTable
@@ -22,8 +22,8 @@ class CompletingTaskViaRestApiTest : BaseTest() {
     @DisplayName("Completing a task through the REST gateway persists the DONE status")
     @Description(
         """POSTing DONE to /api/tasks/{id}/status flows through the HTTP gateway to the gRPC TaskService
-and lands in the Postgres 'tasks' table, verified by reading the task back over REST
-(GET /api/tasks/{id}) and straight from the database."""
+            and lands in the Postgres 'tasks' table, verified by reading the task back over REST
+            (GET /api/tasks/{id}) and straight from the database."""
     )
     fun completingATaskViaRest_persistsTheStatus() {
         allureStep("Given: task '$taskId' exists and REST reports it as OPEN") {

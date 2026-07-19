@@ -8,6 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the Allure report to the gh-pages branch
     steps:
       - uses: actions/checkout@v4
 
@@ -29,5 +31,31 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
-          path: allure-results/
+          path: build/allure-results/
           if-no-files-found: ignore
+
+      # On main, publish the Allure report to GitHub Pages. History is carried over from the
+      # previously published report so the report keeps trend graphs across runs.
+      - name: Restore report history from gh-pages
+        if: always() && github.event_name == 'push'
+        uses: actions/checkout@v4
+        continue-on-error: true # first run: no gh-pages branch yet
+        with:
+          ref: gh-pages
+          path: previous-report
+
+      - name: Generate Allure report
+        if: always() && github.event_name == 'push'
+        run: |
+          if [ -d previous-report/history ]; then
+            mkdir -p build/allure-results/history
+            cp -r previous-report/history/. build/allure-results/history/
+          fi
+          ./gradlew allureReport -x test
+
+      - name: Publish Allure report to GitHub Pages
+        if: always() && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/reports/allure-report/allureReport

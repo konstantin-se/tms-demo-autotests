@@ -49,22 +49,23 @@ kotlin {
 // dto_generation_config.yml before main compiles. The connector object it reflects into
 // (io.testignite.database.connectors.TmsDB) lives in its own source set — putting it in main
 // would be circular: the generator needs it compiled, but main can't compile until the
-// generated classes exist.
-val dtoGen: SourceSet by sourceSets.creating {
-    resources.srcDir("src/main/resources") // db/init-tasks.sql for the generation-time Postgres
-}
+// generated classes exist. Main depends on dtoGen's output instead (no cycle that way), so the
+// same TmsDB object is also the runtime connector — no duplicated container bootstrap.
+val dtoGen: SourceSet by sourceSets.creating
 
 dependencies {
     "dtoGenImplementation"("io.github.konstantin-se:TestIgnite:0.3.1")
     "dtoGenImplementation"("org.postgresql:postgresql:42.7.4")
     "dtoGenImplementation"("org.testcontainers:postgresql:1.21.4")
+    implementation(dtoGen.output)
 }
 
 val generateDtoClasses by tasks.registering(JavaExec::class) {
     group = "build"
     description = "Generates table DTOs (io.testignite.tables.*) from the schema of a throwaway Postgres."
     mainClass.set("io.testignite.database.objectGenerator.DtoClassGeneratorKt")
-    classpath = dtoGen.runtimeClasspath
+    // files(...) puts db/init-tasks.sql on the classpath for the generation-time Postgres.
+    classpath = dtoGen.runtimeClasspath + files("src/main/resources")
     // The Gradle daemon may run on an older JDK; TestIgnite's generator needs the project's 23.
     javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(23)) })
     inputs.files("src/main/resources/dto_generation_config.yml", "src/main/resources/db/init-tasks.sql")

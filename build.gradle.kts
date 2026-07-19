@@ -96,6 +96,11 @@ allure {
 
 tasks.test {
     useJUnitPlatform()
+    // Forward the debug flags from the Gradle CLI into the forked test JVM
+    // (e.g. ./gradlew test -Dheaded=true -DslowMo=200).
+    listOf("headed", "slowMo", "timeoutMs").forEach { prop ->
+        System.getProperty(prop)?.let { systemProperty(prop, it) }
+    }
     testLogging {
         events("passed", "skipped", "failed", "standardOut", "standardError")
         showStandardStreams = true

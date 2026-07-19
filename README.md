@@ -103,10 +103,18 @@ Requires Docker (Testcontainers boots Postgres both for DTO generation at build 
 test run).
 
 ```
-./gradlew test allureReport     # full suite + report at build/reports/allure-report/allureReport
+./gradlew test allureServe      # full suite, then serve the Allure report and open the browser
 ./gradlew test --tests "com.tms.tests.e2e.*"      # one level only
 ./gradlew generateDtoClasses    # just regenerate table DTOs
 ./gradlew runApp                # serve the mock app to click through it yourself
 ```
 
 Debug visually with `-Dheaded=true -DslowMo=200`.
+
+## Live Allure report
+
+The report from the latest `main` run is published to GitHub Pages:
+**<https://konstantin-se.github.io/tms-demo-autotests/>**
+
+CI regenerates it on every push to `main` (test failures included — that's when a report matters
+most) and carries `history/` over between deployments, so trend graphs accumulate across runs.

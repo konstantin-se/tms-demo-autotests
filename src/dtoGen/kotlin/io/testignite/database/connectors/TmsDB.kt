@@ -2,15 +2,17 @@ package io.testignite.database.connectors
 
 import io.testignite.database.DBConfig
 import io.testignite.database.DBConnector
+import io.testignite.database.DBSqlExecutor
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 
 /**
- * Build-time-only bootstrap for DtoClassGenerator, which resolves this object by the dbName from
+ * The project's single DB connector, owning the lazy-started Testcontainers Postgres. It lives in
+ * this package (not com.tms.db) because DtoClassGenerator resolves it by the dbName from
  * dto_generation_config.yml and reads the static `connection` backing field reflectively — so
  * `connection` must stay a plain eager `val` (a `by lazy` field would be named `connection$delegate`).
- * Spins up a throwaway Postgres with the same init script as the test-time TmsDBConnector, purely
- * to expose the schema; Ryuk reaps the container when the generator JVM exits.
+ * Main code reaches it as com.tms.db.TmsDBConnector (a typealias); at build time the generator
+ * loads the same class from the dtoGen source set to read the schema.
  */
 object TmsDB {
 
@@ -27,4 +29,6 @@ object TmsDB {
             "public"
         )
     )
+
+    val sqlExecutor = DBSqlExecutor(connection)
 }

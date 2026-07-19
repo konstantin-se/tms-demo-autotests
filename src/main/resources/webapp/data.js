@@ -4,17 +4,8 @@ const TEAMS = [
   { id: 'team-nova', name: 'Team Nova' },
 ];
 
-const USERS = [
-  { id: 'u-ava', name: 'Ava Chen', teamId: 'team-falcon' },
-  { id: 'u-marcus', name: 'Marcus Lee', teamId: 'team-falcon' },
-  { id: 'u-priya', name: 'Priya Nair', teamId: 'team-falcon' },
-  { id: 'u-diego', name: 'Diego Ramirez', teamId: 'team-orbit' },
-  { id: 'u-sofia', name: 'Sofia Kim', teamId: 'team-orbit' },
-  { id: 'u-ethan', name: 'Ethan Brooks', teamId: 'team-orbit' },
-  { id: 'u-grace', name: 'Grace Okafor', teamId: 'team-nova' },
-  { id: 'u-liam', name: 'Liam Turner', teamId: 'team-nova' },
-  { id: 'u-mei', name: 'Mei Tanaka', teamId: 'team-nova' },
-];
+// Users are no longer hardcoded here — app.js loads them from GET /api/users,
+// which the gateway serves from the backend's 'users' table via gRPC ListUsers.
 
 const CURRENT_USER_ID = 'u-ava';
 

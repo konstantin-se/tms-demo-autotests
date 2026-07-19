@@ -1,0 +1,8 @@
+# Config for TestIgnite's DtoClassGenerator (the generateDtoClasses Gradle task).
+# dbName must match an object in io.testignite.database.connectors (src/dtoGen/kotlin) and
+# becomes the generated package: io.testignite.tables.TmsDB.
+databases:
+  - dbName: TmsDB
+    fieldAsCamelCase: true
+    tables:
+      - users

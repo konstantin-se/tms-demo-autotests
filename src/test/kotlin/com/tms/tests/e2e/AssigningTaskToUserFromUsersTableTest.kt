@@ -4,7 +4,7 @@ import com.microsoft.playwright.Page
 import com.tms.db.TasksTable
 import com.tms.db.UsersTable
 import com.tms.pages.TaskBoardPage
-import com.tms.tools.junit.TmsUiExtension
+import com.tms.tools.TmsUiExtension
 import io.qameta.allure.*
 import io.testignite.basetest.BaseTest
 import io.testignite.steps.allureStep

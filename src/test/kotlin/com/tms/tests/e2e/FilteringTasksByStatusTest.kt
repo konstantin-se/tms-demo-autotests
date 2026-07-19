@@ -1,6 +1,6 @@
 ﻿package com.tms.tests.e2e
 
-import com.tms.tools.junit.TmsUiExtension
+import com.tms.tools.TmsUiExtension
 import com.tms.pages.TaskBoardPage
 import com.microsoft.playwright.Page
 import io.qameta.allure.Description

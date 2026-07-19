@@ -1,4 +1,4 @@
-package com.tms.tools.junit
+package com.tms.tools
 
 import com.microsoft.playwright.Browser
 import com.microsoft.playwright.BrowserContext

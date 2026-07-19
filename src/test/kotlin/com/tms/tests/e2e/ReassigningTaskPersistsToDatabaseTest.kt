@@ -3,7 +3,7 @@
 import com.microsoft.playwright.Page
 import com.tms.db.TasksTable
 import com.tms.pages.TaskBoardPage
-import com.tms.tools.junit.TmsUiExtension
+import com.tms.tools.TmsUiExtension
 import com.tms.tools.server.StaticSiteServer
 import io.qameta.allure.*
 import io.testignite.basetest.BaseTest

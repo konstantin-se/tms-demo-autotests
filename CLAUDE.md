@@ -18,7 +18,8 @@ System" web app. This file is the contract; agents in `.claude/agents/` defer to
 ## Layout
 
 - `src/main/kotlin/com/tms/pages/` — Page Object Model (`BasePage`, `pages/components/` with
-  `BaseComponent`); `junit/TmsUiExtension.kt` — per-test `Page` injection; `config/TestConfig.kt`;
+  `BaseComponent`); `tools/TmsUiExtension.kt` — `Page` injection (one shared browser window per
+  run, tests reset state by navigating); `config/TestConfig.kt`;
   `driver/BrowserFactory.kt`; `tools/log/` — Allure step logging listeners (the `allureStep()`
   wrapper itself comes from TestIgnite); `tools/server/` — static server + `GrpcApiServer`.
 - `src/main/proto/` — the `tms.TaskService` contract; generated Java lands under

@@ -77,8 +77,6 @@ sourceSets.main {
 }
 
 protobuf {
-    // protoc must match the protobuf-java that grpc-protobuf 1.82.2 pulls in (3.25.x) —
-    // newer 4.x gencode does not compile against the 3.25 runtime.
     protoc { artifact = "com.google.protobuf:protoc:3.25.8" }
     plugins {
         id("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:1.82.2" }

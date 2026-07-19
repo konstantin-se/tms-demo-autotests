@@ -29,7 +29,15 @@ System" web app. This file is the contract; agents in `.claude/agents/` defer to
 - `src/main/resources/webapp/` — the mock app (vanilla HTML/CSS/JS, in-memory state), served on a
   random port per run. Browsers can't speak native gRPC, so its `fetch()` POSTs land on
   `StaticSiteServer`, which forwards them to the gRPC `TaskService` (UI → HTTP gateway → gRPC → DB).
-  The gateway doubles as a small REST API: `GET /api/tasks/{id}` answers with the task as proto-JSON.
+  The gateway doubles as a small REST API: `GET /api/tasks/{id}` answers with the task as proto-JSON,
+  `GET /api/users` with the `users` table (via gRPC `ListUsers`) — the webapp loads its user list
+  from there, not from a hardcoded array.
+- Table DTOs are generated, not hand-written: the `generateDtoClasses` Gradle task runs TestIgnite's
+  `DtoClassGenerator` before `compileKotlin` (needs Docker — it reads the schema off a throwaway
+  Postgres). Config: `src/main/resources/dto_generation_config.yml`; generator-side connector:
+  `src/dtoGen/kotlin/io/testignite/database/connectors/TmsDB.kt`; output lands under
+  `build/generated/sources/dto/` as `io.testignite.tables.TmsDB.*` (never edit or commit it).
+  Tests reach the tables only through `com.tms.db` objects (`TasksTable`, `UsersTable`).
 - `src/test/kotlin/com/tms/tests/` — one scenario per file, class named `<DoingXyz>Test`, split by
   level: `e2e/` (Playwright UI flows), `rest_api/` (RestAssured against the REST gateway),
   `grpc_api/` (GrpcClient against the gRPC TaskService).

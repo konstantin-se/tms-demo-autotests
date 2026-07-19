@@ -35,6 +35,13 @@ class AssignTaskDialog(
         this@AssignTaskDialog
     }
 
+    fun shouldOfferAssignees(names: List<String>): AssignTaskDialog =
+        allureStep("Verify the assignee options are exactly $names") {
+            assertThat(assigneeSelect.locator("option"))
+                .hasText((listOf("-- Select a user --") + names).toTypedArray())
+            this@AssignTaskDialog
+        }
+
     fun cancel(): TaskRow = allureStep("Cancel the assignment") {
         cancelButton.click()
         sourceRow

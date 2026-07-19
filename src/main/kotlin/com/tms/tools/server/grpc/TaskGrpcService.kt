@@ -1,15 +1,20 @@
 package com.tms.tools.server.grpc
 
 import com.tms.db.TasksTable
+import com.tms.db.UsersTable
 import com.tms.grpc.CompleteTaskRequest
 import com.tms.grpc.GetTaskRequest
+import com.tms.grpc.ListUsersRequest
+import com.tms.grpc.ListUsersResponse
 import com.tms.grpc.ReassignTaskRequest
 import com.tms.grpc.Task
 import com.tms.grpc.TaskServiceGrpc
 import com.tms.grpc.TaskStatus
+import com.tms.grpc.User
 import com.tms.models.TaskDbRecord
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
+import io.testignite.tables.TmsDB.Users
 
 /**
  * gRPC implementation of tms.TaskService, backed by the same Postgres 'tasks'
@@ -31,6 +36,14 @@ class TaskGrpcService : TaskServiceGrpc.TaskServiceImplBase() {
         respondWithTask(responseObserver, request.taskId)
     }
 
+    override fun listUsers(request: ListUsersRequest, responseObserver: StreamObserver<ListUsersResponse>) {
+        val response = ListUsersResponse.newBuilder()
+            .addAllUsers(UsersTable.selectAllUsers().map { it.toProto() })
+            .build()
+        responseObserver.onNext(response)
+        responseObserver.onCompleted()
+    }
+
     private fun respondWithTask(responseObserver: StreamObserver<Task>, taskId: String) {
         val record = runCatching { TasksTable.selectTask(taskId) }.getOrNull()
         // selectObject returns an empty DTO when no row matches, and the mapper can write
@@ -45,6 +58,13 @@ class TaskGrpcService : TaskServiceGrpc.TaskServiceImplBase() {
         responseObserver.onNext(record.toProto())
         responseObserver.onCompleted()
     }
+
+    private fun Users.toProto(): User =
+        User.newBuilder()
+            .setId(id ?: "")
+            .setName(name ?: "")
+            .setTeamId(teamId ?: "")
+            .build()
 
     private fun TaskDbRecord.toProto(): Task {
         // The DTO mapper writes SQL NULL straight into the field, bypassing Kotlin null-safety.

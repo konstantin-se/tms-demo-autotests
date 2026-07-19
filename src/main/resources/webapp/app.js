@@ -6,6 +6,19 @@ const state = {
 };
 
 let tasks = INITIAL_TASKS.map((t) => ({ ...t }));
+let USERS = [];
+
+// Users come from the backend's 'users' table (GET /api/users). Dialogs that show user
+// data await this promise so they never render from a not-yet-loaded list.
+const usersReady = (async () => {
+  try {
+    const response = await fetch('/api/users');
+    USERS = (await response.json()).users || [];
+  } catch {
+    USERS = [];
+  }
+  render();
+})();
 
 const STATUS_LABELS = { OPEN: 'Open', IN_PROGRESS: 'In Progress', DONE: 'Done' };
 const PRIORITY_LABELS = { LOW: 'Low', MEDIUM: 'Medium', HIGH: 'High' };
@@ -78,7 +91,8 @@ function render() {
   tbody.innerHTML = rows.map(rowHtml).join('');
 }
 
-function openAssignDialog(taskId) {
+async function openAssignDialog(taskId) {
+  await usersReady;
   const task = tasks.find((t) => t.id === taskId);
   const dialog = document.getElementById('assign-dialog');
   dialog.dataset.taskId = taskId;
@@ -113,7 +127,8 @@ function confirmAssign() {
   render();
 }
 
-function openDetailDialog(taskId) {
+async function openDetailDialog(taskId) {
+  await usersReady;
   const task = tasks.find((t) => t.id === taskId);
   document.getElementById('detail-dialog-title').textContent = task.title;
   document.getElementById('detail-description').textContent = task.description;

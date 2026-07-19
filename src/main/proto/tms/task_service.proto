@@ -18,6 +18,10 @@ service TaskService {
 
   // Mark a task DONE. Called when the UI's "Mark complete" button is pressed.
   rpc CompleteTask(CompleteTaskRequest) returns (Task);
+
+  // List every user from the 'users' table. The webapp loads its assignee data
+  // through this instead of shipping a hardcoded user list.
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
 }
 
 // Status values mirror the strings stored in the 'tasks' table.
@@ -46,4 +50,17 @@ message ReassignTaskRequest {
 
 message CompleteTaskRequest {
   string task_id = 1;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string team_id = 3;
+}
+
+message ListUsersRequest {
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
 }

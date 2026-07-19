@@ -31,6 +31,11 @@ object TaskServiceApi {
             )
         }
 
+    fun listUsers(): ListUsersResponse =
+        allureStep("gRPC: ListUsers") {
+            taskService.listUsers(ListUsersRequest.getDefaultInstance())
+        }
+
     fun waitForTaskStatus(taskId: String, status: TaskStatus): Unit =
         allureStep("gRPC: wait until task '$taskId' has status ${status.name}") {
             waitForWithAssert(5, 1, TimeUnit.SECONDS) {

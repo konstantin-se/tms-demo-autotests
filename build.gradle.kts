@@ -45,6 +45,36 @@ kotlin {
     jvmToolchain(23)
 }
 
+// TestIgnite's DtoClassGenerator: generates Kotlin data classes from the DB tables listed in
+// dto_generation_config.yml before main compiles. The connector object it reflects into
+// (io.testignite.database.connectors.TmsDB) lives in its own source set — putting it in main
+// would be circular: the generator needs it compiled, but main can't compile until the
+// generated classes exist.
+val dtoGen: SourceSet by sourceSets.creating {
+    resources.srcDir("src/main/resources") // db/init-tasks.sql for the generation-time Postgres
+}
+
+dependencies {
+    "dtoGenImplementation"("io.github.konstantin-se:TestIgnite:0.3.1")
+    "dtoGenImplementation"("org.postgresql:postgresql:42.7.4")
+    "dtoGenImplementation"("org.testcontainers:postgresql:1.21.4")
+}
+
+val generateDtoClasses by tasks.registering(JavaExec::class) {
+    group = "build"
+    description = "Generates table DTOs (io.testignite.tables.*) from the schema of a throwaway Postgres."
+    mainClass.set("io.testignite.database.objectGenerator.DtoClassGeneratorKt")
+    classpath = dtoGen.runtimeClasspath
+    // The Gradle daemon may run on an older JDK; TestIgnite's generator needs the project's 23.
+    javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(23)) })
+    inputs.files("src/main/resources/dto_generation_config.yml", "src/main/resources/db/init-tasks.sql")
+    outputs.dir(layout.buildDirectory.dir("generated/sources/dto/main/kotlin"))
+}
+
+sourceSets.main {
+    kotlin.srcDir(generateDtoClasses)
+}
+
 protobuf {
     // protoc must match the protobuf-java that grpc-protobuf 1.82.2 pulls in (3.25.x) —
     // newer 4.x gencode does not compile against the 3.25 runtime.

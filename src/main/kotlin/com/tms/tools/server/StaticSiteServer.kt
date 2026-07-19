@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import com.tms.grpc.CompleteTaskRequest
 import com.tms.grpc.GetTaskRequest
+import com.tms.grpc.ListUsersRequest
 import com.tms.grpc.ReassignTaskRequest
 import com.tms.grpc.TaskServiceGrpc
 import com.tms.tools.log.logger
@@ -56,6 +57,10 @@ object StaticSiteServer {
     private fun handle(exchange: HttpExchange) {
         val path = exchange.requestURI.path
         if (exchange.requestMethod == "GET") {
+            if (path == "/api/users") {
+                handleListUsers(exchange)
+                return
+            }
             val taskMatcher = taskRoute.matcher(path)
             if (taskMatcher.matches()) {
                 handleGetTask(exchange, taskMatcher.group(1))
@@ -116,6 +121,24 @@ object StaticSiteServer {
             }
         } catch (e: Exception) {
             logger().error("Failed to read task '{}' via gRPC", taskId, e)
+            exchange.sendResponseHeaders(500, -1)
+        } finally {
+            exchange.close()
+        }
+    }
+
+    // The webapp bootstraps its user list from here instead of a hardcoded array:
+    // GET /api/users answers with the gRPC ListUsers response (backed by the 'users'
+    // table) rendered as proto-JSON.
+    private fun handleListUsers(exchange: HttpExchange) {
+        try {
+            val users = taskService.listUsers(ListUsersRequest.getDefaultInstance())
+            val bytes = JsonFormat.printer().print(users).toByteArray(Charsets.UTF_8)
+            exchange.responseHeaders.add("Content-Type", "application/json; charset=utf-8")
+            exchange.sendResponseHeaders(200, bytes.size.toLong())
+            exchange.responseBody.use { it.write(bytes) }
+        } catch (e: Exception) {
+            logger().error("Failed to list users via gRPC", e)
             exchange.sendResponseHeaders(500, -1)
         } finally {
             exchange.close()

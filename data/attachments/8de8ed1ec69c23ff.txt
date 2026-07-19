@@ -1,0 +1,4 @@
+TaskDbRecord(id=t-rest-1,
+title=Verify REST gateway,
+status=DONE,
+assigneeId=null)

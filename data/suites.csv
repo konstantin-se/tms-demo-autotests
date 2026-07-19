@@ -1,0 +1,45 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Sun Jul 19 13:23:00 UTC 2026","Sun Jul 19 13:23:00 UTC 2026","244","","com.tms.tests.e2e.ReassigningTaskToDifferentUserTest","","com.tms.tests.e2e.ReassigningTaskToDifferentUserTest","reassigningTask_changesTheAssignee","Reassigning a task changes the assignee","Opening the assign dialog on an already-assigned task and confirming a different user replaces the assignee."
+"passed","Sun Jul 19 13:22:59 UTC 2026","Sun Jul 19 13:23:00 UTC 2026","148","","com.tms.tests.e2e.ReassigningACompletedTaskTest","","com.tms.tests.e2e.ReassigningACompletedTaskTest","reassigningACompletedTask_isBlocked","A completed task cannot be reassigned","A task with status Done has its reassign control disabled, and its assignee stays unchanged."
+"passed","Sun Jul 19 13:22:57 UTC 2026","Sun Jul 19 13:22:57 UTC 2026","305","","com.tms.tests.e2e.AssigningTaskToUserFromUsersTableTest","","com.tms.tests.e2e.AssigningTaskToUserFromUsersTableTest","assigningTask_toUserRowFromUsersTable","Assigning a task to a user read from the 'users' table","
+        Reads a user row from the Postgres 'users' table as a Users DTO generated from the table
+        schema by TestIgnite's DtoClassGenerator, assigns a task to that user through the UI by the
+        row's name, and verifies the row's id landed in the 'tasks' table.
+        "
+"passed","Sun Jul 19 13:23:01 UTC 2026","Sun Jul 19 13:23:01 UTC 2026","46","","com.tms.tests.grpc_api.ReassigningTaskViaGrpcApiTest","","com.tms.tests.grpc_api.ReassigningTaskViaGrpcApiTest","reassigningATaskViaGrpc_persistsTheAssignee","Reassigning a task through the gRPC TaskService persists the new assignee","
+        Calling ReassignTask on the gRPC TaskService through TestIgnite's GrpcClient moves the task
+        to the new assignee, verified from the RPC response, a follow-up GetTask, and the backing
+        Postgres 'tasks' row.
+        "
+"passed","Sun Jul 19 13:22:59 UTC 2026","Sun Jul 19 13:22:59 UTC 2026","190","","com.tms.tests.e2e.MarkingTaskCompleteTest","","com.tms.tests.e2e.MarkingTaskCompleteTest","markingATaskComplete_updatesItsStatus","Marking a task complete updates its status","Clicking 'Mark complete' on an open task updates its status badge to Done."
+"passed","Sun Jul 19 13:22:58 UTC 2026","Sun Jul 19 13:22:59 UTC 2026","1384","","com.tms.tests.e2e.MarkingTaskCompletePersistsViaGrpcTest","","com.tms.tests.e2e.MarkingTaskCompletePersistsViaGrpcTest","markingATaskComplete_persistsViaGrpc","Marking a task complete persists the status to the gRPC TaskService","
+        Clicking 'Mark complete' updates the status badge and reaches the backend's gRPC TaskService
+        (UI → HTTP gateway → CompleteTask), verified by calling GetTask through TestIgnite's GrpcClient.
+        "
+"passed","Sun Jul 19 13:22:43 UTC 2026","Sun Jul 19 13:22:57 UTC 2026","13576","","com.tms.tests.e2e.AssignDialogListsUsersFromUsersTableTest","","com.tms.tests.e2e.AssignDialogListsUsersFromUsersTableTest","assignDialog_listsTheTeamUsersFromUsersTable","Assign dialog offers exactly the team's users from the 'users' table","
+        The assignee dropdown is populated from the backend's 'users' table (via the gateway's
+        GET /api/users → gRPC ListUsers), so it must offer exactly the team's rows — read here as
+        Users DTOs generated from the table schema by TestIgnite's DtoClassGenerator.
+        "
+"passed","Sun Jul 19 13:23:01 UTC 2026","Sun Jul 19 13:23:01 UTC 2026","22","","com.tms.tests.grpc_api.ListingUsersViaGrpcApiTest","","com.tms.tests.grpc_api.ListingUsersViaGrpcApiTest","listingUsersViaGrpc_returnsEveryUserRow","Listing users through the gRPC TaskService returns every row of the 'users' table","
+        ListUsers on the gRPC TaskService must mirror the Postgres 'users' table row for row,
+        compared against Users DTOs generated from the table schema by TestIgnite's
+        DtoClassGenerator.
+        "
+"passed","Sun Jul 19 13:23:00 UTC 2026","Sun Jul 19 13:23:01 UTC 2026","163","","com.tms.tests.e2e.SwitchingTeamsRefreshesTaskListTest","","com.tms.tests.e2e.SwitchingTeamsRefreshesTaskListTest","switchingTeams_refreshesTaskList","Switching teams refreshes the task list","Changing the team selector drops the previous team's tasks and shows the new team's tasks."
+"passed","Sun Jul 19 13:22:57 UTC 2026","Sun Jul 19 13:22:58 UTC 2026","157","","com.tms.tests.e2e.FilteringTasksByStatusTest","","com.tms.tests.e2e.FilteringTasksByStatusTest","filteringByStatus_showsOnlyMatchingTasks","Filtering by status shows only matching tasks","Filtering the task list to 'Done' hides Open and In Progress tasks for the selected team."
+"passed","Sun Jul 19 13:23:00 UTC 2026","Sun Jul 19 13:23:00 UTC 2026","147","","com.tms.tests.e2e.SelectingTeamLoadsItsTasksTest","","com.tms.tests.e2e.SelectingTeamLoadsItsTasksTest","selectingTeam_loadsItsTasks","Selecting a team loads its tasks","Before a team is chosen the board prompts for one; selecting a team shows only that team's tasks."
+"passed","Sun Jul 19 13:22:57 UTC 2026","Sun Jul 19 13:22:57 UTC 2026","258","","com.tms.tests.e2e.AssignmentRequiresSelectingAUserTest","","com.tms.tests.e2e.AssignmentRequiresSelectingAUserTest","confirmingWithoutSelectingAUser_showsValidationError","Confirming assignment without a user shows a validation error","Confirming the assign dialog while no user is selected shows a validation error and leaves the task unassigned."
+"passed","Sun Jul 19 13:22:58 UTC 2026","Sun Jul 19 13:22:58 UTC 2026","196","","com.tms.tests.e2e.FilteringToMyTasksTest","","com.tms.tests.e2e.FilteringToMyTasksTest","filteringToMyTasks_showsOnlyTasksAssignedToTheCurrentUser","Filtering to my tasks shows only tasks assigned to the current user","Toggling 'Show only my tasks' hides tasks assigned to other users or left unassigned."
+"passed","Sun Jul 19 13:23:01 UTC 2026","Sun Jul 19 13:23:02 UTC 2026","1131","","com.tms.tests.rest_api.CompletingTaskViaRestApiTest","","com.tms.tests.rest_api.CompletingTaskViaRestApiTest","completingATaskViaRest_persistsTheStatus","Completing a task through the REST gateway persists the DONE status","
+        POSTing DONE to /api/tasks/{id}/status flows through the HTTP gateway to the gRPC TaskService
+        and lands in the Postgres 'tasks' table, verified by reading the task back over REST
+        (GET /api/tasks/{id}) and straight from the database.
+        "
+"passed","Sun Jul 19 13:23:00 UTC 2026","Sun Jul 19 13:23:00 UTC 2026","248","","com.tms.tests.e2e.ReassigningTaskPersistsToDatabaseTest","","com.tms.tests.e2e.ReassigningTaskPersistsToDatabaseTest","reassigningTask_persistsToDatabase","Reassigning a task persists the new assignee to the database","
+        Reassigning a task through the UI updates the assignee on screen and in the backing
+        Postgres 'tasks' table, verified via TestIgnite's DBSqlExecutor.
+        "
+"passed","Sun Jul 19 13:23:01 UTC 2026","Sun Jul 19 13:23:01 UTC 2026","211","","com.tms.tests.e2e.ViewingTaskDetailsTest","","com.tms.tests.e2e.ViewingTaskDetailsTest","viewingATask_showsItsFullDetails","Viewing a task shows its full details","Opening the detail dialog for a task shows its description, status, priority, due date and assignee."
+"passed","Sun Jul 19 13:23:00 UTC 2026","Sun Jul 19 13:23:00 UTC 2026","177","","com.tms.tests.e2e.SortingTasksByDueDateTest","","com.tms.tests.e2e.SortingTasksByDueDateTest","sortingByDueDate_ordersTasksChronologically","Sorting by due date orders tasks chronologically","Sorting Team Falcon's tasks by due date lists them earliest-due first."
+"passed","Sun Jul 19 13:22:57 UTC 2026","Sun Jul 19 13:22:57 UTC 2026","257","","com.tms.tests.e2e.AssigningUnassignedTaskTest","","com.tms.tests.e2e.AssigningUnassignedTaskTest","assigningUnassignedTask_setsTheChosenUserAsAssignee","Assigning an unassigned task sets the chosen user as assignee","Opening the assign dialog on an unassigned task and confirming a user sets that user as assignee."

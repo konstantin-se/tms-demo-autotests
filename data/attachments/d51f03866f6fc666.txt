@@ -1,0 +1,2 @@
+SELECT assignee_id FROM tasks
+WHERE id = 't-1' AND assignee_id = 'u-priya'

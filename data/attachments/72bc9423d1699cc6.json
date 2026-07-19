@@ -1,0 +1,39 @@
+{
+  "users": [{
+    "id": "u-ava",
+    "name": "Ava Chen",
+    "teamId": "team-falcon"
+  }, {
+    "id": "u-diego",
+    "name": "Diego Ramirez",
+    "teamId": "team-orbit"
+  }, {
+    "id": "u-ethan",
+    "name": "Ethan Brooks",
+    "teamId": "team-orbit"
+  }, {
+    "id": "u-grace",
+    "name": "Grace Okafor",
+    "teamId": "team-nova"
+  }, {
+    "id": "u-liam",
+    "name": "Liam Turner",
+    "teamId": "team-nova"
+  }, {
+    "id": "u-marcus",
+    "name": "Marcus Lee",
+    "teamId": "team-falcon"
+  }, {
+    "id": "u-mei",
+    "name": "Mei Tanaka",
+    "teamId": "team-nova"
+  }, {
+    "id": "u-priya",
+    "name": "Priya Nair",
+    "teamId": "team-falcon"
+  }, {
+    "id": "u-sofia",
+    "name": "Sofia Kim",
+    "teamId": "team-orbit"
+  }]
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<title>TMS — Task Management System</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="app-header">
+  <h1>TMS — Task Management System</h1>
+</header>
+
+<main>
+  <section class="toolbar" id="filter-bar" aria-label="Task filters">
+    <div class="field">
+      <label for="team-select">Team</label>
+      <select id="team-select">
+        <option value="">Select a team</option>
+        <option value="team-falcon">Team Falcon</option>
+        <option value="team-orbit">Team Orbit</option>
+        <option value="team-nova">Team Nova</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="status-filter">Status</label>
+      <select id="status-filter">
+        <option value="ALL">All</option>
+        <option value="OPEN">Open</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="DONE">Done</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="sort-select">Sort by</label>
+      <select id="sort-select">
+        <option value="dueDate">Due date</option>
+        <option value="priority">Priority</option>
+      </select>
+    </div>
+
+    <div class="field checkbox-field">
+      <input type="checkbox" id="my-tasks-toggle" style="">
+      <label for="my-tasks-toggle">Show only my tasks</label>
+    </div>
+  </section>
+
+  <p id="empty-state" role="status" hidden="">Select a team to view its tasks.</p>
+
+  <table id="task-table">
+    <caption>Tasks</caption>
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Status</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Due date</th>
+        <th scope="col">Assignee</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="task-rows">
+    <tr data-task-id="t-5">
+      <td>Archive Q1 reports</td>
+      <td><span class="status-badge status-DONE">Done</span></td>
+      <td>Low</td>
+      <td>2026-06-30</td>
+      <td class="assignee-cell">Priya Nair</td>
+      <td class="actions-cell">
+        <button type="button" class="view-btn" data-task-id="t-5" aria-label="View details for Archive Q1 reports">View</button>
+        <button type="button" class="assign-btn" data-task-id="t-5" aria-label="Reassign Archive Q1 reports" disabled="">Reassign</button>
+        
+      </td>
+    </tr>
+  
+    <tr data-task-id="t-4">
+      <td>Patch export timeout</td>
+      <td><span class="status-badge status-IN_PROGRESS">In Progress</span></td>
+      <td>High</td>
+      <td>2026-07-12</td>
+      <td class="assignee-cell">Marcus Lee</td>
+      <td class="actions-cell">
+        <button type="button" class="view-btn" data-task-id="t-4" aria-label="View details for Patch export timeout">View</button>
+        <button type="button" class="assign-btn" data-task-id="t-4" aria-label="Reassign Patch export timeout">Reassign</button>
+        <button type="button" class="complete-btn" data-task-id="t-4" aria-label="Mark Patch export timeout as complete">Mark complete</button>
+      </td>
+    </tr>
+  
+    <tr data-task-id="t-1">
+      <td>Investigate flaky login</td>
+      <td><span class="status-badge status-OPEN">Open</span></td>
+      <td>High</td>
+      <td>2026-07-14</td>
+      <td class="assignee-cell">Unassigned</td>
+      <td class="actions-cell">
+        <button type="button" class="view-btn" data-task-id="t-1" aria-label="View details for Investigate flaky login">View</button>
+        <button type="button" class="assign-btn" data-task-id="t-1" aria-label="Assign Investigate flaky login">Assign</button>
+        <button type="button" class="complete-btn" data-task-id="t-1" aria-label="Mark Investigate flaky login as complete">Mark complete</button>
+      </td>
+    </tr>
+  
+    <tr data-task-id="t-3">
+      <td>Write onboarding checklist</td>
+      <td><span class="status-badge status-IN_PROGRESS">In Progress</span></td>
+      <td>Medium</td>
+      <td>2026-07-16</td>
+      <td class="assignee-cell">Ava Chen</td>
+      <td class="actions-cell">
+        <button type="button" class="view-btn" data-task-id="t-3" aria-label="View details for Write onboarding checklist">View</button>
+        <button type="button" class="assign-btn" data-task-id="t-3" aria-label="Reassign Write onboarding checklist">Reassign</button>
+        <button type="button" class="complete-btn" data-task-id="t-3" aria-label="Mark Write onboarding checklist as complete">Mark complete</button>
+      </td>
+    </tr>
+  
+    <tr data-task-id="t-2">
+      <td>Refresh dashboard styles</td>
+      <td><span class="status-badge status-OPEN">Open</span></td>
+      <td>Low</td>
+      <td>2026-07-20</td>
+      <td class="assignee-cell">Unassigned</td>
+      <td class="actions-cell">
+        <button type="button" class="view-btn" data-task-id="t-2" aria-label="View details for Refresh dashboard styles">View</button>
+        <button type="button" class="assign-btn" data-task-id="t-2" aria-label="Assign Refresh dashboard styles">Assign</button>
+        <button type="button" class="complete-btn" data-task-id="t-2" aria-label="Mark Refresh dashboard styles as complete">Mark complete</button>
+      </td>
+    </tr>
+  </tbody>
+  </table>
+</main>
+
+<dialog id="assign-dialog" aria-labelledby="assign-dialog-title" data-task-id="t-2">
+  <form method="dialog">
+    <h2 id="assign-dialog-title">Assign task</h2>
+    <p id="assign-dialog-task-title">Refresh dashboard styles</p>
+    <div class="field">
+      <label for="assignee-select">Assignee</label>
+      <select id="assignee-select"><option value="">-- Select a user --</option><option value="u-ava">Ava Chen</option><option value="u-marcus">Marcus Lee</option><option value="u-priya">Priya Nair</option></select>
+    </div>
+    <p role="alert" id="assign-error">Please select a user before confirming.</p>
+    <menu>
+      <button type="button" id="assign-cancel-btn">Cancel</button>
+      <button type="button" id="assign-confirm-btn">Confirm assignment</button>
+    </menu>
+  </form>
+</dialog>
+
+<dialog id="detail-dialog" aria-labelledby="detail-dialog-title">
+  <form method="dialog">
+    <h2 id="detail-dialog-title"></h2>
+    <dl>
+      <dt>Description</dt><dd id="detail-description"></dd>
+      <dt>Status</dt><dd id="detail-status"></dd>
+      <dt>Priority</dt><dd id="detail-priority"></dd>
+      <dt>Due date</dt><dd id="detail-due-date"></dd>
+      <dt>Assignee</dt><dd id="detail-assignee"></dd>
+    </dl>
+    <menu>
+      <button type="button" id="detail-close-btn">Close</button>
+    </menu>
+  </form>
+</dialog>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+
+</body></html>

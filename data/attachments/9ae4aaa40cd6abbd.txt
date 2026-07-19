@@ -1,0 +1,2 @@
+INSERT INTO tasks (id, title, status, assignee_id)
+VALUES ('t-grpc-1', 'Verify gRPC TaskService', 'OPEN', NULL)
